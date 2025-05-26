@@ -6,28 +6,9 @@ import matplotlib.pyplot as plt
 from PIL import Image
 from torchvision import models, transforms
 
-import os
-import glob
-
-def delete_all_images(directory, extensions=["*.png", "*.jpg", "*.jpeg"]):
-    for ext in extensions:
-        files = glob.glob(os.path.join(directory, ext))
-        for f in files:
-            try:
-                os.remove(f)
-                print(f"Deleted: {f}")
-            except Exception as e:
-                print(f"Failed to delete {f}: {e}")
-
-# Example usage
-delete_all_images("./static/Output")
-
-
-
 # Class labels
 TARGET_DISEASES = ["Atelectasis", "Cardiomegaly", "Effusion",
                    "Infiltration", "Mass", "Nodule", "Pneumonia", "Pneumothorax"]
-
 
 # LSE Pooling Layer
 class LSEPooling(nn.Module):
@@ -42,7 +23,6 @@ class LSEPooling(nn.Module):
         x_exp = torch.exp(r * (x.view(x.size(0), x.size(1), -1) - x_max))
         x_lse = x_max + (1.0 / r) * torch.log(self.eps + x_exp.mean(dim=2, keepdim=True))
         return x_lse.squeeze(-1)
-
 
 # Model
 class ChestXrayModel(nn.Module):
@@ -72,17 +52,15 @@ class ChestXrayModel(nn.Module):
     def get_activations(self):
         return self.feature_maps
 
-
 # Load model
 def load_model(model_path):
     model = ChestXrayModel()
-    state_dict = torch.load(model_path, map_location=torch.device("cpu"))
+    state_dict = torch.load(model_path, map_location=torch.device("cpu"), weights_only=False)
     model.load_state_dict(state_dict)
     model.to("cpu")
     model.eval()
     return model
-
-
+    
 # Generate Grad-CAM
 def generate_gradcam(model, image_tensor, class_idx):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -110,7 +88,6 @@ def generate_gradcam(model, image_tensor, class_idx):
         cam = cam.detach().cpu().numpy()
         return cam
 
-
 # Grad-CAM visualization
 def visualize_gradcams(model, image_path, threshold=0.5, top_k=3):
     transform = transforms.Compose([
@@ -131,14 +108,14 @@ def visualize_gradcams(model, image_path, threshold=0.5, top_k=3):
 
     # Get all indices where probability > threshold
     above_thresh_indices = [(i, p) for i, p in enumerate(probs) if p > threshold]
-
+    
     # Sort by probability in descending order and take top_k
     top_predictions = sorted(above_thresh_indices, key=lambda x: x[1], reverse=True)[:top_k]
 
     if not top_predictions:
         print("No predictions above threshold.")
         return
-    selected_probs=[]
+
     for class_idx, prob in top_predictions:
         cam = generate_gradcam(model, image_tensor.clone(), class_idx)
 
@@ -146,33 +123,26 @@ def visualize_gradcams(model, image_path, threshold=0.5, top_k=3):
         cam_resized = np.uint8(255 * cam)
         heatmap = Image.fromarray(cam_resized).resize((512, 512), resample=Image.BILINEAR)
         heatmap = np.array(heatmap)
-        heatmap = plt.cm.jet(heatmap)[:, :, :3]
+        heatmap = plt.cm.jet(heatmap)[:, :, :3]  # RGB heatmap only
 
-        # RGB heatmap only
         # Convert PIL image to array
         base_img = np.array(pil_image) / 255.0
+
         # Overlay heatmap on image
         overlay = 0.5 * heatmap + 0.5 * base_img
         overlay = np.clip(overlay, 0, 1)
+
         plt.figure(figsize=(6, 6))
         plt.imshow(overlay)
         plt.title(f"Grad-CAM: {TARGET_DISEASES[class_idx]} ({prob:.2f})")
         plt.axis("off")
-        plt.savefig(f"static/Output/{TARGET_DISEASES[class_idx]}.png")
-        # plt.show()
-        selected_probs.append((TARGET_DISEASES[class_idx], prob))
-    return selected_probs
+        plt.show()
 
 
 # Example usage
 if __name__ == "__main__":
-    delete_all_images("static/Output")
-    image_path = "static/2.png"  # Replace with your test image
-    model_path = "model.pth"
+    image_path = "Replace With Test image"  # Replace with your test image
+    model_path = "./chestxray_model_resnet50.pth"
 
     model = load_model(model_path)
-    disease_prob=visualize_gradcams(model, image_path)
-    print("\nProbabilities array:", disease_prob)
-    top_preds = [(disease, float(prob)) for disease, prob in disease_prob]
-    print(top_preds)
-
+    visualize_gradcams(model, image_path)

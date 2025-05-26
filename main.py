@@ -12,7 +12,7 @@ from fastapi.exceptions import HTTPException
 from fastapi.staticfiles import StaticFiles
 from predictions import load_model,visualize_gradcams
 model_path="model.pth"
-model = load_model(model_path)
+model = load_model(model_path)  
 UPLOAD_DIR = Path(r"static/uploaded_images")  # Create a folder named 'uploaded_images' in your project directory
 UPLOAD_DIR.mkdir(exist_ok=True)
 app = FastAPI()
@@ -34,6 +34,7 @@ def get_output_images():
 @app.get("/", response_class=HTMLResponse)
 def display_landing_page(request: Request):
     return templates.TemplateResponse("landing_page1.html", {"request": request})
+
 
 @app.get("/analyze", response_class=HTMLResponse)
 def analyze_images(request: Request):
