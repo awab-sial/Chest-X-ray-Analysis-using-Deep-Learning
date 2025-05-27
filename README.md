@@ -109,7 +109,7 @@ Grad-CAM visualizations are provided for visual explainability, highlighting aff
 1. Clone the repository:
    ```
    git clone https://github.com/awab-sial/Chest-X-ray-Analysis-using-Deep-Learning
-   cd chest-xray-analysis
+   cd Chest-X-ray-Analysis-using-Deep-Learning
 
 2. Install dependencies:
 
@@ -123,10 +123,10 @@ Grad-CAM visualizations are provided for visual explainability, highlighting aff
    python train.py
    ```
 
-4. Launch frontend (if GUI included):
+4. Launch frontend:
 
    ```bash
-   streamlit run app.py
+   python main.py
    ```
 
 
@@ -135,7 +135,6 @@ Grad-CAM visualizations are provided for visual explainability, highlighting aff
 ## 📁 Repository Structure
 
 ```
-📂 your-project-root/
 ├── 📁 Model_Training       # Contains training and evaluation logic
 │   ├── train.py            # Script to train the model
 │   └── test.py             # Script to test the model on a test set
@@ -156,7 +155,7 @@ This project has been showcased on my LinkedIn profile.
 You can view detailed updates, project insights, and discussions there.
 
 Check it out here:  
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Demo-blue?logo=linkedin&style=for-the-badge)](https://www.linkedin.com/in/your-profile/)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Demo-blue?logo=linkedin&style=for-the-badge)](https://tinyurl.com/392wh5z9)
 
 
 ---
@@ -169,6 +168,7 @@ Check it out here:
 Supervised by: 
 * **Dr. Arshad Farhad**
 * **Ms. Ayeza Ghazanfar**
+* **Ms. Mehroz Sadiq**
 
 ---
 
