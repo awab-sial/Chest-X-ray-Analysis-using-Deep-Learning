@@ -1,13 +1,13 @@
 
 # 🧠 Chest X-ray Analysis using Deep Learning
 
-A final year Artificial Intelligence project developed at Bahria University Islamabad that leverages deep learning (ResNet-50) for multi-label classification of thoracic diseases from chest X-ray images. The system includes Grad-CAM visualizations to aid radiologists in understanding model decisions.
+A third year Artificial Intelligence project developed at Bahria University Islamabad that leverages deep learning (ResNet-50) for multi-label classification of thoracic diseases from chest X-ray images. The system includes Grad-CAM visualizations to aid radiologists in understanding model decisions.
 
 ---
 
 ## 📌 Project Overview
 
-Radiologists often face challenges interpreting complex X-ray images. This AI-powered diagnostic tool assists in detecting various thoracic diseases like Pneumonia, Edema, and Cardiomegaly using deep learning techniques. It aims to enhance diagnostic accuracy and reduce human error in medical imaging.
+Radiologists often face challenges interpreting complex X-ray images. This AI-powered diagnostic tool assists in detecting various thoracic diseases like Pneumonia, Edema, Cardiomegaly, Infiltration etc using deep learning techniques. It aims to enhance diagnostic accuracy and reduce human error in medical imaging.
 
 ---
 
